@@ -1,39 +1,58 @@
-<!doctype html>
-<html lang="en">
+<?php
+session_start();
+
+// 1️⃣ Load cấu hình
+$config = require __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../core/Database.php';
+
+$db = new Core\Database($config);
+$conn = $db->connect();
+$email = 'info@gmail.com';
+
+$sql = "SELECT * FROM users WHERE email = '$email'";
+$stmt = $conn->query($sql);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$menuSql = "SELECT * FROM menus WHERE position = :position ORDER BY `sort_order` ASC";
+$menuStmt = $conn->prepare($menuSql);
+$position = 'header';
+$menuStmt->bindParam(':position', $position, PDO::PARAM_STR);
+$menuStmt->execute();
+$menus = $menuStmt->fetchAll(PDO::FETCH_ASSOC);
+
+?>
+<!DOCTYPE html>
+<html lang="vi">
 
 <head>
-    <title>Title</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/custom-frontend.min.css">
-    <link rel="stylesheet" href="css/custom-pro-widget-nav-menu.min.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/swiper.min.css">
-    <link rel="stylesheet" href="css/custom.css">
+    <meta charset="UTF-8">
+    <title>Trang Admin</title>
+    <!-- CSS dùng chung -->
+    <link rel="stylesheet" href="../css/bs-4.css">
+    <link rel="stylesheet" href="../css/custom-frontend.min.css">
+    <link rel="stylesheet" href="../css/custom-pro-widget-nav-menu.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/swiper.min.css">
+    <link rel="stylesheet" href="../css/custom.css">
 </head>
 
 <body>
-
-    <body
-        class="home wp-singular page-template-default page page-id-11 wp-custom-logo wp-embed-responsive wp-theme-hello-elementor theme-default elementor-default elementor-kit-5 elementor-page elementor-page-11">
-        <a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+    <?php
+    require_once __DIR__ . '/../partials/menu_contact.php';
+    ?>
+    <header>
         <div data-elementor-type="header" data-elementor-id="79"
             class="elementor elementor-79 elementor-location-header" data-elementor-post-type="elementor_library">
             <div class="elementor-element elementor-element-9c1389e elementor-hidden-mobile e-flex e-con-boxed e-con e-parent"
                 data-id="9c1389e" data-element_type="container"
                 data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
                 <div class="e-con-inner">
-                    <div class="elementor-element elementor-element-aad9589 e-con-full e-flex e-con e-child"
-                        data-id="aad9589" data-element_type="container">
-                        <div class="elementor-element elementor-element-201b7ee elementor-widget elementor-widget-text-editor"
-                            data-id="201b7ee" data-element_type="widget" data-widget_type="text-editor.default">
+                    <div class="elementor-element elementor-element-eea999b e-con-full e-flex e-con e-child"
+                        data-id="eea999b" data-element_type="container">
+                        <div class="elementor-element elementor-element-9a641f0 elementor-widget elementor-widget-text-editor"
+                            data-id="9a641f0" data-element_type="widget" data-widget_type="text-editor.default">
                             <div class="elementor-widget-container">
-                                <p>Sáng T2 &#8211; T7: 07h30 &#8211; 12h<br />Chiều T2 &#8211; T6: 13h30 &#8211; 17h</p>
+                                <p><?= htmlspecialchars($user['description']) ?></p>
                             </div>
                         </div>
                     </div>
@@ -41,8 +60,8 @@
                         data-id="eea999b" data-element_type="container">
                         <div class="elementor-element elementor-element-9a641f0 elementor-widget elementor-widget-text-editor"
                             data-id="9a641f0" data-element_type="widget" data-widget_type="text-editor.default">
-                            <div class="elementor-widget-container">
-                                <p>Email: takomi.vn@gmail.com</p>
+                            <div class="elementor-widget-container text-center">
+                                <p>Email: <?= htmlspecialchars($user['email']) ?></p>
                             </div>
                         </div>
                     </div>
@@ -51,13 +70,13 @@
                         <div class="elementor-element elementor-element-42bf48c elementor-widget elementor-widget-text-editor"
                             data-id="42bf48c" data-element_type="widget" data-widget_type="text-editor.default">
                             <div class="elementor-widget-container">
-                                <p>Địa chỉ: Số 143 LK5 KĐT Waterfront, quận Lê Chân, thành phố Hải Phòng</p>
+                                <p>Địa chỉ: <?= htmlspecialchars($user['address']) ?></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="elementor-element elementor-element-5e983c4 elementor-hidden-mobile e-flex e-con-boxed e-con e-parent"
+            <div style="position: sticky;" class="elementor-element elementor-element-5e983c4 elementor-hidden-mobile e-flex e-con-boxed e-con e-parent"
                 data-id="5e983c4" data-element_type="container"
                 data-settings="{&quot;background_background&quot;:&quot;classic&quot;,&quot;sticky&quot;:&quot;top&quot;,&quot;sticky_on&quot;:[&quot;widescreen&quot;,&quot;desktop&quot;,&quot;laptop&quot;,&quot;tablet_extra&quot;,&quot;tablet&quot;,&quot;mobile_extra&quot;,&quot;mobile&quot;],&quot;sticky_offset&quot;:0,&quot;sticky_effects_offset&quot;:0,&quot;sticky_anchor_link_offset&quot;:0}">
                 <div class="e-con-inner">
@@ -85,102 +104,21 @@
                                 <nav aria-label="Menu"
                                     class="elementor-nav-menu--main elementor-nav-menu__container elementor-nav-menu--layout-horizontal e--pointer-text e--animation-grow">
                                     <ul id="menu-1-7c89c62" class="elementor-nav-menu">
-                                        <li
-                                            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-11 current_page_item menu-item-17">
-                                            <a href="https://takomi.vn/" aria-current="page"
-                                                class="elementor-item elementor-item-active">Trang chủ</a>
-                                        </li>
-                                        <li
-                                            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-20">
-                                            <a href="https://takomi.vn/gioi-thieu/" class="elementor-item">Giới
-                                                thiệu</a>
-                                        </li>
-                                        <li
-                                            class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-464">
-                                            <a href="#" class="elementor-item elementor-item-anchor">Dịch vụ</a>
-                                            <ul class="sub-menu elementor-nav-menu--dropdown">
-                                                <li
-                                                    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-26">
-                                                    <a href="https://takomi.vn/category/dich-vu-ve-sinh/"
-                                                        class="elementor-sub-item">Dịch vụ vệ sinh</a>
-                                                    <ul class="sub-menu elementor-nav-menu--dropdown">
-                                                        <li
-                                                            class="menu-item menu-item-type-post_type menu-item-object-post menu-item-214">
-                                                            <a href="https://takomi.vn/ve-sinh-cong-nghiep/"
-                                                                class="elementor-sub-item">Vệ sinh công nghiệp</a>
-                                                        </li>
-                                                        <li
-                                                            class="menu-item menu-item-type-post_type menu-item-object-post menu-item-215">
-                                                            <a href="https://takomi.vn/don-nha-theo-gio/"
-                                                                class="elementor-sub-item">Dọn nhà theo giờ</a>
-                                                        </li>
-                                                        <li
-                                                            class="menu-item menu-item-type-post_type menu-item-object-post menu-item-216">
-                                                            <a href="https://takomi.vn/giat-la-chuyen-sau/"
-                                                                class="elementor-sub-item">Giặt là chuyên sâu</a>
-                                                        </li>
-                                                        <li
-                                                            class="menu-item menu-item-type-post_type menu-item-object-post menu-item-217">
-                                                            <a href="https://takomi.vn/ve-sinh-thong-tac-duong-ong/"
-                                                                class="elementor-sub-item">Vệ sinh, thông tắc đường
-                                                                ống</a>
-                                                        </li>
-                                                        <li
-                                                            class="menu-item menu-item-type-post_type menu-item-object-post menu-item-218">
-                                                            <a href="https://takomi.vn/ve-sinh-cong-ty-khach-san-khu-cong-nghiep-toa-nha-cao-tang/"
-                                                                class="elementor-sub-item">Vệ sinh Công ty, khách sạn,
-                                                                khu công nghiệp, toà nhà cao tầng</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li
-                                                    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-32">
-                                                    <a href="https://takomi.vn/category/thu-gom-rac-thai-khong-doc-hai/"
-                                                        class="elementor-sub-item">Thu gom rác thải không độc hại</a>
-                                                    <ul class="sub-menu elementor-nav-menu--dropdown">
-                                                        <li
-                                                            class="menu-item menu-item-type-post_type menu-item-object-post menu-item-219">
-                                                            <a href="https://takomi.vn/cung-cap-xe-hut-chat-thai/"
-                                                                class="elementor-sub-item">Cung cấp xe hút chất thải</a>
-                                                        </li>
-                                                        <li
-                                                            class="menu-item menu-item-type-post_type menu-item-object-post menu-item-220">
-                                                            <a href="https://takomi.vn/thu-gom-rac-thai-tu-ho-gia-dinh-va-co-so-kinh-doanh/"
-                                                                class="elementor-sub-item">Thu gom rác thải từ hộ gia
-                                                                đình và cơ sở kinh doanh</a>
-                                                        </li>
-                                                        <li
-                                                            class="menu-item menu-item-type-post_type menu-item-object-post menu-item-221">
-                                                            <a href="https://takomi.vn/hut-be-phot-thoat-nuoc-va-xu-ly-nuoc-thai/"
-                                                                class="elementor-sub-item">Hút bể phốt, thoát nước và xử
-                                                                lý nước thải</a>
-                                                        </li>
-                                                        <li
-                                                            class="menu-item menu-item-type-post_type menu-item-object-post menu-item-666">
-                                                            <a href="https://takomi.vn/thu-gom-phe-lieu/"
-                                                                class="elementor-sub-item">Thu gom phế liệu</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li
-                                            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-40">
-                                            <a href="https://takomi.vn/du-an/" class="elementor-item">Dự án</a>
-                                        </li>
-                                        <li
-                                            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636">
-                                            <a href="https://takomi.vn/bang-gia/" class="elementor-item">Bảng giá</a>
-                                        </li>
-                                        <li
-                                            class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-42">
-                                            <a href="https://takomi.vn/category/tin-tuc/" class="elementor-item">Tin
-                                                tức</a>
-                                        </li>
-                                        <li
-                                            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-41">
-                                            <a href="https://takomi.vn/lien-he/" class="elementor-item">Liên hệ</a>
-                                        </li>
+                                        <?php
+                                        $currentPath = $_SERVER['REQUEST_URI'];
+                                        ?>
+                                        <?php foreach ($menus as $menu): ?>
+                                            <?php
+                                            // So sánh: nếu menu['url'] là URL đầy đủ
+                                            $isActive = ($menu['url'] == $currentPath) ? 'elementor-item-active' : '';
+                                            ?>
+                                            <li class="menu-item menu-item-type-post_type menu-item-object-page">
+                                                <a href="<?= htmlspecialchars($menu['url']) ?>"
+                                                    class="elementor-item <?= $isActive ?>">
+                                                    <?= htmlspecialchars($menu['name']) ?>
+                                                </a>
+                                            </li>
+                                        <?php endforeach; ?>
                                     </ul>
                                 </nav>
                                 <div class="elementor-menu-toggle" role="button" tabindex="0" aria-label="Menu Toggle"
@@ -202,112 +140,14 @@
                                 <nav class="elementor-nav-menu--dropdown elementor-nav-menu__container"
                                     aria-hidden="true">
                                     <ul id="menu-2-7c89c62" class="elementor-nav-menu">
-                                        <li
-                                            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-11 current_page_item menu-item-17">
-                                            <a href="https://takomi.vn/" aria-current="page"
-                                                class="elementor-item elementor-item-active" tabindex="-1">Trang chủ</a>
+                                        <li class="menu-item menu-item-type-post_type menu-item-object-page">
+                                            <a href="" class="elementor-item elementor-item-active">Trang chủ</a>
                                         </li>
-                                        <li
-                                            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-20">
+                                        <li class="menu-item menu-item-type-post_type menu-item-object-page">
                                             <a href="https://takomi.vn/gioi-thieu/" class="elementor-item"
                                                 tabindex="-1">Giới thiệu</a>
                                         </li>
-                                        <li
-                                            class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-464">
-                                            <a href="#" class="elementor-item elementor-item-anchor" tabindex="-1">Dịch
-                                                vụ</a>
-                                            <ul class="sub-menu elementor-nav-menu--dropdown">
-                                                <li
-                                                    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-26">
-                                                    <a href="https://takomi.vn/category/dich-vu-ve-sinh/"
-                                                        class="elementor-sub-item" tabindex="-1">Dịch vụ vệ sinh</a>
-                                                    <ul class="sub-menu elementor-nav-menu--dropdown">
-                                                        <li
-                                                            class="menu-item menu-item-type-post_type menu-item-object-post menu-item-214">
-                                                            <a href="https://takomi.vn/ve-sinh-cong-nghiep/"
-                                                                class="elementor-sub-item" tabindex="-1">Vệ sinh công
-                                                                nghiệp</a>
-                                                        </li>
-                                                        <li
-                                                            class="menu-item menu-item-type-post_type menu-item-object-post menu-item-215">
-                                                            <a href="https://takomi.vn/don-nha-theo-gio/"
-                                                                class="elementor-sub-item" tabindex="-1">Dọn nhà theo
-                                                                giờ</a>
-                                                        </li>
-                                                        <li
-                                                            class="menu-item menu-item-type-post_type menu-item-object-post menu-item-216">
-                                                            <a href="https://takomi.vn/giat-la-chuyen-sau/"
-                                                                class="elementor-sub-item" tabindex="-1">Giặt là chuyên
-                                                                sâu</a>
-                                                        </li>
-                                                        <li
-                                                            class="menu-item menu-item-type-post_type menu-item-object-post menu-item-217">
-                                                            <a href="https://takomi.vn/ve-sinh-thong-tac-duong-ong/"
-                                                                class="elementor-sub-item" tabindex="-1">Vệ sinh, thông
-                                                                tắc đường ống</a>
-                                                        </li>
-                                                        <li
-                                                            class="menu-item menu-item-type-post_type menu-item-object-post menu-item-218">
-                                                            <a href="https://takomi.vn/ve-sinh-cong-ty-khach-san-khu-cong-nghiep-toa-nha-cao-tang/"
-                                                                class="elementor-sub-item" tabindex="-1">Vệ sinh Công
-                                                                ty, khách sạn, khu công nghiệp, toà nhà cao tầng</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li
-                                                    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-32">
-                                                    <a href="https://takomi.vn/category/thu-gom-rac-thai-khong-doc-hai/"
-                                                        class="elementor-sub-item" tabindex="-1">Thu gom rác thải không
-                                                        độc hại</a>
-                                                    <ul class="sub-menu elementor-nav-menu--dropdown">
-                                                        <li
-                                                            class="menu-item menu-item-type-post_type menu-item-object-post menu-item-219">
-                                                            <a href="https://takomi.vn/cung-cap-xe-hut-chat-thai/"
-                                                                class="elementor-sub-item" tabindex="-1">Cung cấp xe hút
-                                                                chất thải</a>
-                                                        </li>
-                                                        <li
-                                                            class="menu-item menu-item-type-post_type menu-item-object-post menu-item-220">
-                                                            <a href="https://takomi.vn/thu-gom-rac-thai-tu-ho-gia-dinh-va-co-so-kinh-doanh/"
-                                                                class="elementor-sub-item" tabindex="-1">Thu gom rác
-                                                                thải từ hộ gia đình và cơ sở kinh doanh</a>
-                                                        </li>
-                                                        <li
-                                                            class="menu-item menu-item-type-post_type menu-item-object-post menu-item-221">
-                                                            <a href="https://takomi.vn/hut-be-phot-thoat-nuoc-va-xu-ly-nuoc-thai/"
-                                                                class="elementor-sub-item" tabindex="-1">Hút bể phốt,
-                                                                thoát nước và xử lý nước thải</a>
-                                                        </li>
-                                                        <li
-                                                            class="menu-item menu-item-type-post_type menu-item-object-post menu-item-666">
-                                                            <a href="https://takomi.vn/thu-gom-phe-lieu/"
-                                                                class="elementor-sub-item" tabindex="-1">Thu gom phế
-                                                                liệu</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li
-                                            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-40">
-                                            <a href="https://takomi.vn/du-an/" class="elementor-item" tabindex="-1">Dự
-                                                án</a>
-                                        </li>
-                                        <li
-                                            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636">
-                                            <a href="https://takomi.vn/bang-gia/" class="elementor-item"
-                                                tabindex="-1">Bảng giá</a>
-                                        </li>
-                                        <li
-                                            class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-42">
-                                            <a href="https://takomi.vn/category/tin-tuc/" class="elementor-item"
-                                                tabindex="-1">Tin tức</a>
-                                        </li>
-                                        <li
-                                            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-41">
-                                            <a href="https://takomi.vn/lien-he/" class="elementor-item"
-                                                tabindex="-1">Liên hệ</a>
-                                        </li>
+
                                     </ul>
                                 </nav>
                             </div>
@@ -1110,415 +950,4 @@
                 </div>
             </div>
         </div>
-        <iframe class="w-100" style="height: 100vh;" src="https://www.youtube.com/embed/oLL5PsqVFFM"
-            title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-        </iframe>
-
-        <main id="" class="site-main post-11 page type-page status-publish hentry">
-            <div class="container">
-                <div class="page-content">
-                    <div
-                        class="elementor-element elementor-element-f758db5 animated-slow e-flex e-con-boxed e-con e-parent e-lazyloaded animated fadeInUp">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="row align-items-center h-100">
-                                    <div>
-                                        <div
-                                            class="elementor-element elementor-element-1335aa2 elementor-widget elementor-widget-heading">
-                                            <div class="elementor-widget-container">
-                                                <h1 class="elementor-heading-title elementor-size-default">VỀ TAKOMI
-                                                </h1>
-                                            </div>
-                                        </div>
-                                        <div
-                                            class="elementor-element elementor-element-6ba420d elementor-widget elementor-widget-text-editor">
-                                            <div class="elementor-widget-container">
-                                                <p style="font-weight: 400;">Với bề dày kinh nghiệm chuyên môn cùng công
-                                                    nghệ kỹ
-                                                    thuật tiên tiến, <strong>TAKOMI</strong> là Thương hiệu thuộc
-                                                    <strong>Công
-                                                        ty Cổ
-                                                        phần Thương Mại Dịch Vụ Kho Vận Tuấn Khôi</strong> tự hào mang
-                                                    đến
-                                                    các
-                                                    giải
-                                                    pháp và dịch vụ toàn diện về vệ sinh và rác thải không độc
-                                                    hại.&nbsp;
-                                                </p>
-                                                <p style="font-weight: 400;">Chúng tôi quy tụ đội ngũ nhân sự chuyên
-                                                    nghiệp,
-                                                    giàu
-                                                    chuyên môn và luôn sẵn sàng vượt qua mọi thách thức để triển khai dự
-                                                    án
-                                                    hiệu
-                                                    quả, mang đến cho khách hàng những giải pháp vượt trội. Với tinh
-                                                    thần
-                                                    đồng
-                                                    hành
-                                                    và cam kết lâu dài, chúng tôi hân hạnh cùng Quý Khách hàng xây dựng
-                                                    một
-                                                    tương
-                                                    lai bền vững, phát triển mạnh mẽ.</p>
-                                            </div>
-                                        </div>
-                                        <div
-                                            class="elementor-element elementor-element-304938b elementor-widget elementor-widget-button">
-                                            <div class="elementor-widget-container">
-                                                <div class="elementor-button-wrapper">
-                                                    <a class="elementor-button elementor-button-link elementor-size-sm"
-                                                        href="https://takomi.vn/gioi-thieu/">
-                                                        <span class="elementor-button-content-wrapper">
-                                                            <span class="elementor-button-text">VỀ CHÚNG TÔI</span>
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                            <div class="col-6">
-                                <div
-                                    class="elementor-element elementor-element-aa16e9b elementor-widget elementor-widget-image">
-                                    <div class="p-3">
-                                        <img decoding="async" width="736" height="736"
-                                            src="https://takomi.vn/wp-content/uploads/2025/05/VE-TAKOMI.jpg"
-                                            class="elementor-animation-grow attachment-full size-full wp-image-441"
-                                            alt=""
-                                            srcset="https://takomi.vn/wp-content/uploads/2025/05/VE-TAKOMI.jpg 736w, https://takomi.vn/wp-content/uploads/2025/05/VE-TAKOMI-300x300.jpg 300w, https://takomi.vn/wp-content/uploads/2025/05/VE-TAKOMI-150x150.jpg 150w"
-                                            sizes="(max-width: 736px) 100vw, 736px">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="elementor-element elementor-element-91d9ab8 animated-slow e-flex e-con-boxed e-con e-parent e-lazyloaded animated fadeInUp"
-                    data-id="91d9ab8" data-element_type="container">
-                    <div class="e-con-inner">
-                        <div
-                            class="elementor-element elementor-element-2968604 elementor-widget elementor-widget-heading">
-                            <div class="elementor-widget-container">
-                                <h2 class="elementor-heading-title elementor-size-default text-center">DỊCH VỤ CỦA CHÚNG
-                                    TÔI</h2>
-                            </div>
-                        </div>
-                        <div
-                            class="elementor-element elementor-element-e699634 elementor-grid-4 elementor-posts--align-center elementor-grid-tablet-2 elementor-grid-mobile-1 elementor-posts--thumbnail-top elementor-widget elementor-widget-posts">
-                            <div class="elementor-widget-container">
-                                <div
-                                    class="oelementor-posts-container elementor-posts elementor-posts--skin-classic elementor-grid elementor-has-item-rati row">
-                                    <article
-                                        style="border-radius: 10px; padding: 20px 20px 20px 20px; box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);"
-                                        class="elementor-post elementor-grid-item post-658 post type-post status-publish format-standard has-post-thumbnail hentry m-3">
-                                        <img src="https://takomi.vn/wp-content/uploads/2025/05/thu-gom-phe-lieu.webp"
-                                            alt="">
-                                        <div class="elementor-post__text">
-                                            <h3 class="elementor-post__title mt-3">
-                                                <a href="https://takomi.vn/thu-gom-phe-lieu/">
-                                                    Thu gom phế liệu </a>
-                                            </h3>
-                                            <div class="elementor-post__excerpt mt-1">
-                                                <p>Dịch Vụ Thu Gom Phế Liệu Tận Nơi – Uy Tín – Giá Cao –</p>
-                                            </div>
-                                            <a class="elementor-post__read-more"
-                                                href="https://takomi.vn/thu-gom-phe-lieu/"
-                                                aria-label="Read more about Thu gom phế liệu" tabindex="-1">
-                                                XEM THÊM »
-                                            </a>
-                                        </div>
-                                    </article>
-                                    <article style="border-radius: 10px;
-                                        padding: 20px 20px 20px 20px;
-                                        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);"
-                                        class="elementor-post elementor-grid-item post-658 post type-post status-publish format-standard has-post-thumbnail hentry m-3">
-                                        <img src="https://takomi.vn/wp-content/uploads/2025/05/thu-gom-phe-lieu.webp"
-                                            alt="">
-                                        <div class="elementor-post__text">
-                                            <h3 class="elementor-post__title mt-3">
-                                                <a href="https://takomi.vn/thu-gom-phe-lieu/">
-                                                    Thu gom phế liệu </a>
-                                            </h3>
-                                            <div class="elementor-post__excerpt mt-1">
-                                                <p>Dịch Vụ Thu Gom Phế Liệu Tận Nơi – Uy Tín – Giá Cao –Dịch Vụ Thu Gom
-                                                    Phế Liệu Tận Nơi – Uy Tín – Giá Cao –Dịch Vụ Thu Gom Phế Liệu Tận
-                                                    Nơi – Uy Tín – Giá Cao –Dịch Vụ Thu Gom Phế Liệu Tận Nơi – Uy Tín –
-                                                    Giá Cao –Dịch Vụ Thu Gom Phế Liệu Tận Nơi – Uy Tín – Giá Cao –</p>
-                                            </div>
-
-                                            <a class="elementor-post__read-more"
-                                                href="https://takomi.vn/thu-gom-phe-lieu/"
-                                                aria-label="Read more about Thu gom phế liệu" tabindex="-1">
-                                                XEM THÊM » </a>
-
-                                        </div>
-                                    </article>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="elementor-element elementor-element-f33717f elementor-align-center elementor-widget elementor-widget-button"
-                            data-id="f33717f" data-element_type="widget" data-widget_type="button.default">
-                            <div class="elementor-widget-container">
-                                <div class="elementor-button-wrapper">
-                                    <a class="elementor-button elementor-button-link elementor-size-sm"
-                                        href="https://www.facebook.com/messages/t/624913410704455" target="_blank"
-                                        rel="noopener">
-                                        <span class="elementor-button-content-wrapper">
-                                            <span class="elementor-button-text">LIÊN HỆ NGAY</span>
-                                        </span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="d-flex mt-5" style="background-color: #145FAD;">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="elementor-element elementor-element-bb269d3 e-con-full e-flex e-con e-child"
-                                data-id="bb269d3" data-element_type="container">
-                                <div class="elementor-element elementor-element-45b99f0 elementor-view-stacked elementor-shape-circle elementor-widget elementor-widget-icon"
-                                    data-id="45b99f0" data-element_type="widget" data-widget_type="icon.default">
-                                    <div class="elementor-widget-container">
-                                        <div class="row justify-content-center mb-4 mt-4">
-                                            <div class="elementor-icon">
-                                                <svg aria-hidden="true" class="e-font-icon-svg e-far-file-alt"
-                                                    viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M288 248v28c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-28c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12zm-12 72H108c-6.6 0-12 5.4-12 12v28c0 6.6 5.4 12 12 12h168c6.6 0 12-5.4 12-12v-28c0-6.6-5.4-12-12-12zm108-188.1V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V48C0 21.5 21.5 0 48 0h204.1C264.8 0 277 5.1 286 14.1L369.9 98c9 8.9 14.1 21.2 14.1 33.9zm-128-80V128h76.1L256 51.9zM336 464V176H232c-13.3 0-24-10.7-24-24V48H48v416h288z">
-                                                    </path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="elementor-element elementor-element-e1faff0 elementor-widget elementor-widget-counter"
-                                    data-id="e1faff0" data-element_type="widget" data-widget_type="counter.default">
-                                    <div class="elementor-widget-container">
-                                        <div class="elementor-counter">
-                                            <div class="elementor-counter-title text-white">DỰ ÁN</div>
-                                            <div class="elementor-counter-number-wrapper">
-                                                <span class="elementor-counter-number-prefix"></span>
-                                                <span class="elementor-counter-number text-white" data-duration="3000"
-                                                    data-to-value="150" data-from-value="0"
-                                                    data-delimiter=",">150</span>
-                                                <span class="elementor-counter-number-suffix text-white">+</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="elementor-element elementor-element-d66eb27 e-con-full e-flex e-con e-child"
-                                data-id="d66eb27" data-element_type="container">
-                                <div class="elementor-element elementor-element-f855c7b elementor-view-stacked elementor-shape-circle elementor-widget elementor-widget-icon"
-                                    data-id="f855c7b" data-element_type="widget" data-widget_type="icon.default">
-                                    <div class="elementor-widget-container">
-                                        <div class="row justify-content-center mb-4 mt-4">
-                                            <div class="elementor-icon">
-                                                <svg aria-hidden="true" class="e-font-icon-svg e-far-thumbs-up"
-                                                    viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M466.27 286.69C475.04 271.84 480 256 480 236.85c0-44.015-37.218-85.58-85.82-85.58H357.7c4.92-12.81 8.85-28.13 8.85-46.54C366.55 31.936 328.86 0 271.28 0c-61.607 0-58.093 94.933-71.76 108.6-22.747 22.747-49.615 66.447-68.76 83.4H32c-17.673 0-32 14.327-32 32v240c0 17.673 14.327 32 32 32h64c14.893 0 27.408-10.174 30.978-23.95 44.509 1.001 75.06 39.94 177.802 39.94 7.22 0 15.22.01 22.22.01 77.117 0 111.986-39.423 112.94-95.33 13.319-18.425 20.299-43.122 17.34-66.99 9.854-18.452 13.664-40.343 8.99-62.99zm-61.75 53.83c12.56 21.13 1.26 49.41-13.94 57.57 7.7 48.78-17.608 65.9-53.12 65.9h-37.82c-71.639 0-118.029-37.82-171.64-37.82V240h10.92c28.36 0 67.98-70.89 94.54-97.46 28.36-28.36 18.91-75.63 37.82-94.54 47.27 0 47.27 32.98 47.27 56.73 0 39.17-28.36 56.72-28.36 94.54h103.99c21.11 0 37.73 18.91 37.82 37.82.09 18.9-12.82 37.81-22.27 37.81 13.489 14.555 16.371 45.236-5.21 65.62zM88 432c0 13.255-10.745 24-24 24s-24-10.745-24-24 10.745-24 24-24 24 10.745 24 24z">
-                                                    </path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="elementor-element elementor-element-56bd88f elementor-widget elementor-widget-counter"
-                                    data-id="56bd88f" data-element_type="widget" data-widget_type="counter.default">
-                                    <div class="elementor-widget-container">
-                                        <div class="elementor-counter">
-                                            <div class="elementor-counter-title text-white">HÀI LÒNG</div>
-                                            <div class="elementor-counter-number-wrapper">
-                                                <span class="elementor-counter-number-prefix"></span>
-                                                <span class="elementor-counter-number text-white" data-duration="3000"
-                                                    data-to-value="100" data-from-value="0"
-                                                    data-delimiter=",">100</span>
-                                                <span class="elementor-counter-number-suffix text-white">%</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="elementor-element elementor-element-c0642ad e-con-full e-flex e-con e-child"
-                                data-id="c0642ad" data-element_type="container">
-                                <div class="elementor-element elementor-element-c969cfb elementor-view-stacked elementor-shape-circle elementor-widget elementor-widget-icon"
-                                    data-id="c969cfb" data-element_type="widget" data-widget_type="icon.default">
-                                    <div class="elementor-widget-container">
-                                        <div class="row justify-content-center mb-4 mt-4">
-                                            <div class="elementor-icon">
-                                                <svg aria-hidden="true" class="e-font-icon-svg e-far-user"
-                                                    viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M313.6 304c-28.7 0-42.5 16-89.6 16-47.1 0-60.8-16-89.6-16C60.2 304 0 364.2 0 438.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-25.6c0-74.2-60.2-134.4-134.4-134.4zM400 464H48v-25.6c0-47.6 38.8-86.4 86.4-86.4 14.6 0 38.3 16 89.6 16 51.7 0 74.9-16 89.6-16 47.6 0 86.4 38.8 86.4 86.4V464zM224 288c79.5 0 144-64.5 144-144S303.5 0 224 0 80 64.5 80 144s64.5 144 144 144zm0-240c52.9 0 96 43.1 96 96s-43.1 96-96 96-96-43.1-96-96 43.1-96 96-96z">
-                                                    </path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="elementor-element elementor-element-8340011 elementor-widget elementor-widget-counter"
-                                    data-id="8340011" data-element_type="widget" data-widget_type="counter.default">
-                                    <div class="elementor-widget-container">
-                                        <div class="elementor-counter">
-                                            <div class="elementor-counter-title text-white">CHUYÊN GIA</div>
-                                            <div class="elementor-counter-number-wrapper">
-                                                <span class="elementor-counter-number-prefix"></span>
-                                                <span class="elementor-counter-number text-white" data-duration="3000"
-                                                    data-to-value="20" data-from-value="0" data-delimiter=",">20</span>
-                                                <span class="elementor-counter-number-suffix text-white">+</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-
-            <div class="elementor-element elementor-element-850482b e-flex e-con-boxed e-con e-parent e-lazyloaded pt-5">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="elementor-element elementor-element-6a4599a elementor-widget elementor-widget-image"
-                                data-id="6a4599a" data-element_type="widget" data-widget_type="image.default">
-                                <div class="elementor-widget-container">
-                                    <img loading="lazy" decoding="async" width="1252" height="834"
-                                        src="https://takomi.vn/wp-content/uploads/2025/05/gioi-thieu-png.webp"
-                                        class="attachment-full size-full wp-image-507" alt=""
-                                        srcset="https://takomi.vn/wp-content/uploads/2025/05/gioi-thieu-png.webp 1252w, https://takomi.vn/wp-content/uploads/2025/05/gioi-thieu-png-300x200.webp 300w, https://takomi.vn/wp-content/uploads/2025/05/gioi-thieu-png-1024x682.webp 1024w, https://takomi.vn/wp-content/uploads/2025/05/gioi-thieu-png-150x100.webp 150w, https://takomi.vn/wp-content/uploads/2025/05/gioi-thieu-png-768x512.webp 768w"
-                                        sizes="(max-width: 1252px) 100vw, 1252px">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="elementor-element elementor-element-164f5fa elementor-widget elementor-widget-heading"
-                                data-id="164f5fa" data-element_type="widget" data-widget_type="heading.default">
-                                <div class="elementor-widget-container">
-                                    <h2 class="elementor-heading-title elementor-size-default">Bạn Trao Niềm Tin, Chúng
-                                        Tôi Tạo Giá Trị
-                                    </h2>
-                                </div>
-                            </div>
-                            <div class="elementor-element elementor-element-4e347e3 elementor-widget elementor-widget-text-editor mt-3">
-                                <div class="elementor-widget-container">
-                                    <p style="font-weight: 400;"><strong>TAKOMI</strong> – Nơi chúng tôi biến niềm tin
-                                        của bạn thành
-                                        giải pháp hiệu quả, bền vững, góp phần bảo vệ và phát triển môi trường.</p>
-                                </div>
-                            </div>
-                            <div class="elementor-element elementor-element-9de5ae0 elementor-view-stacked elementor-position-left elementor-shape-circle elementor-mobile-position-top elementor-vertical-align-top elementor-widget elementor-widget-icon-box"
-                                data-id="9de5ae0" data-element_type="widget" data-widget_type="icon-box.default">
-                                <div class="elementor-widget-container">
-                                    <div class="elementor-icon-box-wrapper">
-
-                                        <div class="elementor-icon-box-icon">
-                                            <span class="elementor-icon p-3">
-                                                <svg aria-hidden="true" class="e-font-icon-svg e-far-handshake" width="80" height="80"
-                                                    viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M519.2 127.9l-47.6-47.6A56.252 56.252 0 0 0 432 64H205.2c-14.8 0-29.1 5.9-39.6 16.3L118 127.9H0v255.7h64c17.6 0 31.8-14.2 31.9-31.7h9.1l84.6 76.4c30.9 25.1 73.8 25.7 105.6 3.8 12.5 10.8 26 15.9 41.1 15.9 18.2 0 35.3-7.4 48.8-24 22.1 8.7 48.2 2.6 64-16.8l26.2-32.3c5.6-6.9 9.1-14.8 10.9-23h57.9c.1 17.5 14.4 31.7 31.9 31.7h64V127.9H519.2zM48 351.6c-8.8 0-16-7.2-16-16s7.2-16 16-16 16 7.2 16 16c0 8.9-7.2 16-16 16zm390-6.9l-26.1 32.2c-2.8 3.4-7.8 4-11.3 1.2l-23.9-19.4-30 36.5c-6 7.3-15 4.8-18 2.4l-36.8-31.5-15.6 19.2c-13.9 17.1-39.2 19.7-55.3 6.6l-97.3-88H96V175.8h41.9l61.7-61.6c2-.8 3.7-1.5 5.7-2.3H262l-38.7 35.5c-29.4 26.9-31.1 72.3-4.4 101.3 14.8 16.2 61.2 41.2 101.5 4.4l8.2-7.5 108.2 87.8c3.4 2.8 3.9 7.9 1.2 11.3zm106-40.8h-69.2c-2.3-2.8-4.9-5.4-7.7-7.7l-102.7-83.4 12.5-11.4c6.5-6 7-16.1 1-22.6L367 167.1c-6-6.5-16.1-6.9-22.6-1l-55.2 50.6c-9.5 8.7-25.7 9.4-34.6 0-9.3-9.9-8.5-25.1 1.2-33.9l65.6-60.1c7.4-6.8 17-10.5 27-10.5l83.7-.2c2.1 0 4.1.8 5.5 2.3l61.7 61.6H544v128zm48 47.7c-8.8 0-16-7.2-16-16s7.2-16 16-16 16 7.2 16 16c0 8.9-7.2 16-16 16z">
-                                                    </path>
-                                                </svg> </span>
-                                        </div>
-
-                                        <div class="elementor-icon-box-content">
-
-                                            <h3 class="elementor-icon-box-title">
-                                                <span>
-                                                    ĐÁNG TIN CẬY </span>
-                                            </h3>
-
-                                            <p class="elementor-icon-box-description">
-                                                Với 5 năm kinh nghiệm, TAKOMI cung cấp các giải pháp vệ sinh toàn diện,
-                                                luôn đặt khách
-                                                hàng lên hàng đầu. </p>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="elementor-element elementor-element-65c4cb9 elementor-view-stacked elementor-position-left elementor-shape-circle elementor-mobile-position-top elementor-vertical-align-top elementor-widget elementor-widget-icon-box mt-5"
-                                data-id="65c4cb9" data-element_type="widget" data-widget_type="icon-box.default">
-                                <div class="elementor-widget-container">
-                                    <div class="elementor-icon-box-wrapper">
-
-                                        <div class="elementor-icon-box-icon">
-                                            <span class="elementor-icon p-3">
-                                                <svg aria-hidden="true" class="e-font-icon-svg e-fas-hand-holding-usd" width="80" height="80"
-                                                    viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M271.06,144.3l54.27,14.3a8.59,8.59,0,0,1,6.63,8.1c0,4.6-4.09,8.4-9.12,8.4h-35.6a30,30,0,0,1-11.19-2.2c-5.24-2.2-11.28-1.7-15.3,2l-19,17.5a11.68,11.68,0,0,0-2.25,2.66,11.42,11.42,0,0,0,3.88,15.74,83.77,83.77,0,0,0,34.51,11.5V240c0,8.8,7.83,16,17.37,16h17.37c9.55,0,17.38-7.2,17.38-16V222.4c32.93-3.6,57.84-31,53.5-63-3.15-23-22.46-41.3-46.56-47.7L282.68,97.4a8.59,8.59,0,0,1-6.63-8.1c0-4.6,4.09-8.4,9.12-8.4h35.6A30,30,0,0,1,332,83.1c5.23,2.2,11.28,1.7,15.3-2l19-17.5A11.31,11.31,0,0,0,368.47,61a11.43,11.43,0,0,0-3.84-15.78,83.82,83.82,0,0,0-34.52-11.5V16c0-8.8-7.82-16-17.37-16H295.37C285.82,0,278,7.2,278,16V33.6c-32.89,3.6-57.85,31-53.51,63C227.63,119.6,247,137.9,271.06,144.3ZM565.27,328.1c-11.8-10.7-30.2-10-42.6,0L430.27,402a63.64,63.64,0,0,1-40,14H272a16,16,0,0,1,0-32h78.29c15.9,0,30.71-10.9,33.25-26.6a31.2,31.2,0,0,0,.46-5.46A32,32,0,0,0,352,320H192a117.66,117.66,0,0,0-74.1,26.29L71.4,384H16A16,16,0,0,0,0,400v96a16,16,0,0,0,16,16H372.77a64,64,0,0,0,40-14L564,377a32,32,0,0,0,1.28-48.9Z">
-                                                    </path>
-                                                </svg> </span>
-                                        </div>
-
-                                        <div class="elementor-icon-box-content">
-
-                                            <h3 class="elementor-icon-box-title">
-                                                <span>
-                                                    GIÁ TRỊ </span>
-                                            </h3>
-
-                                            <p class="elementor-icon-box-description">
-                                                Chúng tôi hỗ trợ doanh nghiệp tuân thủ pháp luật, phát triển bền vững và
-                                                bảo vệ môi
-                                                trường thông qua các dự án đa dạng. </p>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
-
-        </main>
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-            crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-            crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-            crossorigin="anonymous"></script>
-    </body>
-
-</html>
+    </header>
