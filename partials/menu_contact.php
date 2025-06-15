@@ -4,16 +4,12 @@ require_once __DIR__ . '/../core/Database.php';
 
 $db = new Core\Database($config);
 $conn = $db->connect();
-$email = 'info@gmail.com';
-
-$sql = "SELECT * FROM users WHERE email = '$email'";
+$sql = "SELECT * FROM users WHERE id = 0";
 $stmt = $conn->query($sql);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 ?>
-<div class="elementor-element elementor-element-e14114b elementor-shape-circle elementor-grid-1 e-grid-align-right elementor-fixed elementor-widget elementor-widget-social-icons"
-    data-id="e14114b" data-element_type="widget" data-settings="{&quot;_position&quot;:&quot;fixed&quot;}"
-    data-widget_type="social-icons.default">
+<div class="elementor-element elementor-element-e14114b elementor-shape-circle elementor-grid-1 e-grid-align-right elementor-fixed elementor-widget elementor-widget-social-icons">
     <div style="position: fixed; right: 10px; z-index: 9999; top: 30%;">
         <div class="elementor-social-icons-wrapper elementor-grid" role="list">
             <span class="elementor-grid-item" role="listitem">

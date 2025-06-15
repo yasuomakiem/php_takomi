@@ -7,9 +7,7 @@ require_once __DIR__ . '/../core/Database.php';
 
 $db = new Core\Database($config);
 $conn = $db->connect();
-$email = 'info@gmail.com';
-
-$sql = "SELECT * FROM users WHERE email = '$email'";
+$sql = "SELECT * FROM users WHERE id = 0";
 $stmt = $conn->query($sql);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
