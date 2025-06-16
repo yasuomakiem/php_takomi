@@ -10,8 +10,6 @@ $conn = $db->connect();
 $sql = "SELECT * FROM users WHERE id = 0";
 $stmt = $conn->query($sql);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-require_once __DIR__ . '/../partials/header.php';
 ?>
 
 <link rel="stylesheet" href="../css/tin_tuc.css">
@@ -104,10 +102,5 @@ require_once __DIR__ . '/../partials/header.php';
                 </div>
             </div>
         </div>
-
     </div>
 </div>
-
-<?php
-require_once __DIR__ . '/../partials/footer.php';
-?>

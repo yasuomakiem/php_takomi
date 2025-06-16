@@ -40,7 +40,7 @@ if ($path === '/' || $path === '/home') {
     require_once __DIR__ . '/../controller/ServiceController.php';
     $controller = new Controller\ServiceController($conn);
     $controller->index();
-} elseif ($path === '/tin-tuc') {
+} elseif ($path === '/tin-tuc-su-kien') {
     require_once __DIR__ . '/../partials/header.php';
 
     require_once __DIR__ . '/tin_tuc.php';
@@ -52,8 +52,13 @@ if ($path === '/' || $path === '/home') {
     require_once __DIR__ . '/gioi_thieu.php';
 
     require_once __DIR__ . '/../partials/footer.php';    
-} 
-else {
+}elseif ($path === '/lien-he') {
+    require_once __DIR__ . '/../partials/header.php';
+
+    require_once __DIR__ . '/lien_he.php';
+
+    require_once __DIR__ . '/../partials/footer.php';    
+}else {
     http_response_code(404);
     echo "404 - Not Found";
 }
