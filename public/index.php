@@ -46,6 +46,12 @@ if ($path === '/' || $path === '/home') {
     require_once __DIR__ . '/tin_tuc.php';
 
     require_once __DIR__ . '/../partials/footer.php';    
+}elseif ($path === '/gioi-thieu') {
+    require_once __DIR__ . '/../partials/header.php';
+
+    require_once __DIR__ . '/gioi_thieu.php';
+
+    require_once __DIR__ . '/../partials/footer.php';    
 } 
 else {
     http_response_code(404);
