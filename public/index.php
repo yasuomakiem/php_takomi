@@ -32,9 +32,7 @@ if ($path === '/' || $path === '/home') {
     require_once __DIR__ . '/../partials/footer.php>';    
 
 } elseif ($path === '/admin') {
-    require_once __DIR__ . '/../controller/AdminController.php';
-    $controller = new Controller\AdminController($conn);
-    $controller->index();
+     require_once __DIR__ . '/admin.php>';
 
 } elseif ($path === '/services') {
     require_once __DIR__ . '/../controller/ServiceController.php';
@@ -58,7 +56,7 @@ if ($path === '/' || $path === '/home') {
     require_once __DIR__ . '/lien_he.php';
 
     require_once __DIR__ . '/../partials/footer.php';    
-}elseif ($path === '/san-phan-dich-vu') {
+}elseif ($path === '/san-pham-dich-vu') {
     require_once __DIR__ . '/../partials/header.php';
 
     require_once __DIR__ . '/dich_vu.php';

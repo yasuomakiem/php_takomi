@@ -26,7 +26,7 @@ class AdminController
     // Xác thực: Check với bảng users (name='admin')
     public function auth()
     {
-        session_start();
+        // session_start();
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
 

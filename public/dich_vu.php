@@ -21,8 +21,8 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
   background-size: cover;
   background-position: center;
 ">
-    <h1 class="text-center pt-5">Liên hệ</h1>
-    <h2 class="text-center pt-5">Trang chủ / Liên hệ</h2>
+    <h1 class="text-center pt-5">Sản phẩm - Dịch vụ</h1>
+    <h2 class="text-center pt-5">Trang chủ / Sản phẩm - Dịch vụ</h2>
 </div>
 <div class="d-flex pt-3">
     <div class="container">

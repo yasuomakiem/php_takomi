@@ -100,11 +100,11 @@
                             style="border-radius: 10px; padding: 20px; box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);"
                             class="elementor-post elementor-grid-item m-3">
                             <img src="<?= htmlspecialchars($service['image']) ?>"
-                                alt="<?= htmlspecialchars($service['title']) ?>">
+                                alt="<?= htmlspecialchars($service['name']) ?>">
                             <div class="elementor-post__text">
                                 <h3 class="elementor-post__title mt-3">
                                     <a href="#">
-                                        <?= htmlspecialchars($service['title']) ?>
+                                        <?= htmlspecialchars($service['name']) ?>
                                     </a>
                                 </h3>
                                 <div class="elementor-post__excerpt mt-1">
@@ -112,7 +112,7 @@
                                 </div>
                                 <a class="elementor-post__read-more" href="#"
                                     style="color: #00712D;font-size: 13px;font-weight: 500;"
-                                    aria-label="Read more about <?= htmlspecialchars($service['title']) ?>" tabindex="-1">
+                                    aria-label="Read more about <?= htmlspecialchars($service['name']) ?>" tabindex="-1">
                                     XEM THÊM »
                                 </a>
                             </div>
