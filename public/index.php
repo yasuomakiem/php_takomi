@@ -62,6 +62,12 @@ if ($path === '/' || $path === '/home') {
     require_once __DIR__ . '/dich_vu.php';
 
     require_once __DIR__ . '/../partials/footer.php';    
+}elseif (strpos($path, '/dich-vu') === 0) {
+    require_once __DIR__ . '/../partials/header.php';
+
+    require_once __DIR__ . '/chi_tiet_dich_vu.php';
+
+    require_once __DIR__ . '/../partials/footer.php';
 }else {
     http_response_code(404);
     echo "404 - Not Found";

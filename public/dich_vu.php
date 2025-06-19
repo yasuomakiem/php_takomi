@@ -5,11 +5,42 @@ $config = require __DIR__ . '/../config/config.php';
 // 2) Load class
 require_once __DIR__ . '/../core/Database.php';
 
+// 3) Kết nối DB
 $db = new Core\Database($config);
 $conn = $db->connect();
-$sql = "SELECT * FROM users WHERE id = 0";
-$stmt = $conn->query($sql);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// 4) Lấy danh mục Dịch vụ
+$sql_categories = "SELECT * FROM service_categories ORDER BY id ASC";
+$stmt_categories = $conn->query($sql_categories);
+$news_categories = $stmt_categories->fetchAll(PDO::FETCH_ASSOC);
+
+// 5) Lọc bài viết theo category (nếu có)
+$selectedCategory = isset($_GET['category']) ? $_GET['category'] : null;
+
+if ($selectedCategory) {
+    $sql_category_id = "SELECT id FROM service_categories WHERE slug = ?";
+    $stmt_category_id = $conn->prepare($sql_category_id);
+    $stmt_category_id->execute([$selectedCategory]);
+    $categoryRow = $stmt_category_id->fetch(PDO::FETCH_ASSOC);
+
+    if ($categoryRow) {
+        $categoryId = $categoryRow['id'];
+        $sql_posts = "SELECT * FROM services WHERE category_id = ? ORDER BY updated_at DESC";
+        $stmt_posts = $conn->prepare($sql_posts);
+        $stmt_posts->execute([$categoryId]);
+    } else {
+        // Slug không tồn tại => không bài nào
+        $stmt_posts = $conn->prepare("SELECT * FROM services WHERE 1=0");
+        $stmt_posts->execute();
+    }
+} else {
+    // Không chọn danh mục => lấy tất cả
+    $sql_posts = "SELECT * FROM services ORDER BY updated_at DESC";
+    $stmt_posts = $conn->query($sql_posts);
+}
+
+$news_posts = $stmt_posts->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <link rel="stylesheet" href="../css/tin_tuc.css">
@@ -21,83 +52,86 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
   background-size: cover;
   background-position: center;
 ">
-    <h1 class="text-center pt-5">Sản phẩm - Dịch vụ</h1>
-    <h2 class="text-center pt-5">Trang chủ / Sản phẩm - Dịch vụ</h2>
+    <h1 class="text-center pt-5">Dịch vụ</h1>
+    <h2 class="text-center pt-5">Trang chủ / Dịch vụ</h2>
 </div>
-<div class="d-flex pt-3">
-    <div class="container">
-        <div class="row">
-            <div class="col-4">
-                <div class="elementor-element elementor-element-bb269d3 e-con-full e-flex e-con e-child"
-                    data-id="bb269d3" data-element_type="container">
-                    <div class="elementor-element elementor-element-45b99f0 elementor-view-stacked elementor-shape-circle elementor-widget elementor-widget-icon"
-                        data-id="45b99f0" data-element_type="widget" data-widget_type="icon.default">
-                        <div class="elementor-widget-container">
-                            <div class="row justify-content-center mb-4 mt-4">
-                                <div class="elementor-icon" style="background-color: #145FAD;color: #145FAD;">
-                                    <svg aria-hidden="true" class="e-font-icon-svg e-fas-phone-alt"
-                                        viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M497.39 361.8l-112-48a24 24 0 0 0-28 6.9l-49.6 60.6A370.66 370.66 0 0 1 130.6 204.11l60.6-49.6a23.94 23.94 0 0 0 6.9-28l-48-112A24.16 24.16 0 0 0 122.6.61l-104 24A24 24 0 0 0 0 48c0 256.5 207.9 464 464 464a24 24 0 0 0 23.4-18.6l24-104a24.29 24.29 0 0 0-14.01-27.6z">
-                                        </path>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="elementor-element elementor-element-e1faff0 elementor-widget elementor-widget-counter">
-                        <div class="elementor-widget-container">
-                            <div class="elementor-counter">
-                                <h6 style="color: #145FAD;" class="text-center "><?= htmlspecialchars($user['hotline']) ?></h5>
-                                <h5 style="color: #145FAD;" class="text-center mb-0">HOTLINE</h5>
-                            </div>
-                        </div>
-                    </div>
+
+<!-- Layout -->
+<div class="elementor-element elementor-element-534d8546 e-flex e-con-boxed e-con e-parent mt-3">
+    <div class="e-con-inner">
+        <!-- Menu danh mục -->
+        <div class="elementor-element elementor-element-35ca9b3d e-con-full e-flex e-con e-child m-2">
+            <div class="elementor-element elementor-element-5fc0f465 elementor-widget elementor-widget-template">
+                <div style="background-color: #00712D;" class="elementor-widget-container p-2">
+                    <nav aria-label="Menu"
+                        class="elementor-nav-menu--main elementor-nav-menu__container elementor-nav-menu--layout-vertical e--pointer-background e--animation-fade">
+                        <ul id="menu-news-categories" class="elementor-nav-menu sm-vertical">
+                            <style>
+                                #menu-news-categories .menu-item:hover {
+                                    background-color: #145FAD;
+                                }
+
+                                #menu-news-categories .menu-item.active {
+                                    background-color: #145FAD;
+                                }
+                            </style>
+                            <?php foreach ($news_categories as $category): ?>
+                                <?php
+                                $isActive = ($selectedCategory === $category['slug']) ? 'active' : '';
+                                ?>
+                                <li class="menu-item <?php echo $isActive; ?>">
+                                    <a style="color:#fff;font-weight:500;"
+                                        href="?category=<?php echo urlencode($category['slug']); ?>" class="elementor-item">
+                                        <?php echo htmlspecialchars($category['name']); ?>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </nav>
                 </div>
             </div>
-            <div class="col-4">
-                <div class="elementor-element elementor-element-d66eb27 e-con-full e-flex e-con e-child"
-                    data-id="d66eb27" data-element_type="container">
-                    <div class="elementor-element elementor-element-f855c7b elementor-view-stacked elementor-shape-circle elementor-widget elementor-widget-icon"
-                        data-id="f855c7b" data-element_type="widget" data-widget_type="icon.default">
-                        <div class="elementor-widget-container">
-                            <div class="row justify-content-center mb-4 mt-4">
-                                <div class="elementor-icon" style="background-color: #145FAD;color: #145FAD;">
-                                    <svg aria-hidden="true" class="e-font-icon-svg e-fas-envelope" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"></path></svg>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="elementor-element elementor-element-e1faff0 elementor-widget elementor-widget-counter">
-                        <div class="elementor-widget-container">
-                            <div class="elementor-counter">
-                                <h6 style="color: #145FAD;" class="text-center "><?= htmlspecialchars($user['email']) ?></h5>
-                                <h5 style="color: #145FAD;" class="text-center mb-0">EMAIL</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="elementor-element elementor-element-c0642ad e-con-full e-flex e-con e-child"
-                    data-id="c0642ad" data-element_type="container">
-                    <div class="elementor-element elementor-element-c969cfb elementor-view-stacked elementor-shape-circle elementor-widget elementor-widget-icon"
-                        data-id="c969cfb" data-element_type="widget" data-widget_type="icon.default">
-                        <div class="elementor-widget-container">
-                            <div class="row justify-content-center mb-4 mt-4">
-                                <div class="elementor-icon" style="background-color: #145FAD;color: #145FAD;">
-                                    <svg aria-hidden="true" class="e-font-icon-svg e-fas-map-marker-alt" viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg"><path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path></svg>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="elementor-element elementor-element-e1faff0 elementor-widget elementor-widget-counter">
-                        <div class="elementor-widget-container">
-                            <div class="elementor-counter">
-                                <h6 style="color: #145FAD;" class="text-center "><?= htmlspecialchars($user['address']) ?></h5>
-                                <h5 style="color: #145FAD;" class="text-center mb-0">ĐỊA CHỈ</h5>
-                            </div>
-                        </div>
+        </div>
+
+        <!-- Danh sách bài viết -->
+        <div class="elementor-element elementor-element-7225435c e-con-full e-flex e-con e-child">
+            <div
+                class="elementor-element elementor-element-d75ffcd elementor-posts--align-center elementor-grid-3 elementor-grid-tablet-2 elementor-grid-mobile-1 elementor-posts--thumbnail-top load-more-align-center elementor-widget elementor-widget-posts">
+                <div class="elementor-widget-container">
+                    <div
+                        class="elementor-posts-container elementor-posts elementor-posts--skin-classic elementor-grid elementor-has-item-ratio">
+
+                        <?php if (count($news_posts) > 0): ?>
+                            <?php foreach ($news_posts as $post): ?>
+                                <article
+                                    class="elementor-post elementor-grid-item post-<?php echo $post['id']; ?> post type-post status-publish format-standard has-post-thumbnail hentry">
+                                    <a class="elementor-post__thumbnail__link"
+                                        href="/dich-vu/<?php echo htmlspecialchars($post['id']); ?>" tabindex="-1">
+                                        <div class="elementor-post__thumbnail">
+                                            <img width="800" height="533"
+                                                src="<?php echo htmlspecialchars($post['image']); ?>" alt="">
+                                        </div>
+                                    </a>
+                                    <div class="elementor-post__text">
+                                        <h3 class="elementor-post__title">
+                                            <a href="/dich-vu/<?php echo htmlspecialchars($post['id']); ?>">
+                                                <?php echo htmlspecialchars($post['name']); ?>
+                                            </a>
+                                        </h3>
+                                        <div class="elementor-post__excerpt">
+                                            <p><?php echo htmlspecialchars($post['description']); ?></p>
+                                        </div>
+                                        <a class="elementor-post__read-more"
+                                            href="/dich-vu/<?php echo htmlspecialchars($post['id']); ?>"
+                                            aria-label="Read more about <?php echo htmlspecialchars($post['name']); ?>">
+                                            Xem thêm »
+                                        </a>
+                                    </div>
+                                </article>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>Không có bài viết nào trong danh mục này.</p>
+                        <?php endif; ?>
+
                     </div>
                 </div>
             </div>
