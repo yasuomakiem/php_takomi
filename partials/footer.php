@@ -118,7 +118,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                                         margin-top: 16px;
                                     }
                                 </style>
-                                <form class="elementor-form" action="/action/save_contact.php"  method="post" name="New Form">
+                                <form class="elementor-form" action="/public/action/save_contact.php"  method="post" name="New Form">
                                     <div class="elementor-form-fields-wrapper elementor-labels-">
                                         <div
                                             class="elementor-field-type-text elementor-field-group elementor-column elementor-field-group-field_f262d60 elementor-col-100 elementor-field-required">

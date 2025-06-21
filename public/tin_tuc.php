@@ -43,12 +43,12 @@ $news_posts = $stmt_posts->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
-<link rel="stylesheet" href="../css/tin_tuc.css">
+<link rel="stylesheet" href="/public/css/tin_tuc.css">
 
 <!-- Banner -->
 <div style="
   height: 300px;
-  background-image: url('/img/bg_tin_tuc.webp');
+  background-image: url('/public/img/bg_tin_tuc.webp');
   background-size: cover;
   background-position: center;
 ">

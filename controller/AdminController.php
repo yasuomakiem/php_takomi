@@ -37,7 +37,7 @@ class AdminController
         $admin = $stmt->fetch();
         if ($admin && password_verify($password, $admin['password'])) {
             $_SESSION['admin_logged_in'] = true;
-            header('Location: admin.php');
+            header('Location: /admin');
         } else {
             echo "<p style='color:red'>Sai thông tin đăng nhập!</p>";
             $this->login();

@@ -26,17 +26,17 @@ $menus = $menuStmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title>Trang Admin</title>
     <!-- CSS dùng chung -->
-    <link rel="stylesheet" href="../css/bs-4.css">
-    <link rel="stylesheet" href="../css/custom-frontend.min.css">
-    <link rel="stylesheet" href="../css/custom-pro-widget-nav-menu.min.css">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/swiper.min.css">
-    <link rel="stylesheet" href="../css/custom.css">
+    <link rel="stylesheet" href="/public/css/bs-4.css">
+    <link rel="stylesheet" href="/public/css/custom-frontend.min.css">
+    <link rel="stylesheet" href="/public/css/custom-pro-widget-nav-menu.min.css">
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/public/css/swiper.min.css">
+    <link rel="stylesheet" href="/public/css/custom.css">
 </head>
 
 <body>
     <?php
-    require_once __DIR__ . '/../partials/menu_contact.php';
+    require_once __DIR__ . '/menu_contact.php';
     ?>
     <header>
         <div data-elementor-type="header" data-elementor-id="79"

@@ -17,7 +17,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 <!-- Banner -->
 <div style="
   height: 300px;
-  background-image: url('/img/bg_tin_tuc.webp');
+  background-image: url('/public/img/bg_tin_tuc.webp');
   background-size: cover;
   background-position: center;
 ">
