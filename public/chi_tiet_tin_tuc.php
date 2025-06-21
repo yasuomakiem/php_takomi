@@ -1,7 +1,9 @@
 <?php
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header('Location: admin.php?action=login');
     exit;
@@ -22,7 +24,7 @@ if ($id <= 0) {
 }
 
 // Lấy thông tin dịch vụ
-$sql = "SELECT * FROM services WHERE id = :id";
+$sql = "SELECT * FROM news WHERE id = :id";
 $stmt = $conn->prepare($sql);
 $stmt->execute([':id' => $id]);
 $service = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -32,8 +34,8 @@ if (!$service) {
 }
 
 // Lấy chi tiết
-$sql = "SELECT * FROM service_details WHERE service_id = :service_id";
-$stmt = $conn->prepare($sql);
+$sql = "SELECT * FROM new_details WHERE service_id = :service_id";
+$stmt = $conn->prepare(query: $sql);
 $stmt->execute([':service_id' => $id]);
 $details = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>

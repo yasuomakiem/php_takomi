@@ -9,8 +9,8 @@ require_once __DIR__ . '/../core/Database.php';
 $db = new Core\Database($config);
 $conn = $db->connect();
 
-// 4) Lấy danh mục tin tức
-$sql_categories = "SELECT * FROM news_categories ORDER BY id ASC";
+// 4) Lấy danh mục Tin tức
+$sql_categories = "SELECT * FROM new_categories ORDER BY id ASC";
 $stmt_categories = $conn->query($sql_categories);
 $news_categories = $stmt_categories->fetchAll(PDO::FETCH_ASSOC);
 
@@ -18,14 +18,14 @@ $news_categories = $stmt_categories->fetchAll(PDO::FETCH_ASSOC);
 $selectedCategory = isset($_GET['category']) ? $_GET['category'] : null;
 
 if ($selectedCategory) {
-    $sql_category_id = "SELECT id FROM news_categories WHERE slug = ?";
+    $sql_category_id = "SELECT id FROM new_categories WHERE slug = ?";
     $stmt_category_id = $conn->prepare($sql_category_id);
     $stmt_category_id->execute([$selectedCategory]);
     $categoryRow = $stmt_category_id->fetch(PDO::FETCH_ASSOC);
 
     if ($categoryRow) {
         $categoryId = $categoryRow['id'];
-        $sql_posts = "SELECT * FROM news WHERE category_id = ? ORDER BY published_at DESC";
+        $sql_posts = "SELECT * FROM news WHERE category_id = ? ORDER BY updated_at DESC";
         $stmt_posts = $conn->prepare($sql_posts);
         $stmt_posts->execute([$categoryId]);
     } else {
@@ -35,7 +35,7 @@ if ($selectedCategory) {
     }
 } else {
     // Không chọn danh mục => lấy tất cả
-    $sql_posts = "SELECT * FROM news ORDER BY published_at DESC";
+    $sql_posts = "SELECT * FROM news ORDER BY updated_at DESC";
     $stmt_posts = $conn->query($sql_posts);
 }
 
@@ -105,24 +105,24 @@ $news_posts = $stmt_posts->fetchAll(PDO::FETCH_ASSOC);
                                 <article
                                     class="elementor-post elementor-grid-item post-<?php echo $post['id']; ?> post type-post status-publish format-standard has-post-thumbnail hentry">
                                     <a class="elementor-post__thumbnail__link"
-                                        href="/tin-tuc/<?php echo htmlspecialchars($post['slug']); ?>" tabindex="-1">
+                                        href="/tin-tuc/<?php echo htmlspecialchars($post['id']); ?>" tabindex="-1">
                                         <div class="elementor-post__thumbnail">
                                             <img width="800" height="533"
-                                                src="/uploads/<?php echo htmlspecialchars($post['image']); ?>" alt="">
+                                                src="<?php echo htmlspecialchars($post['image']); ?>" alt="">
                                         </div>
                                     </a>
                                     <div class="elementor-post__text">
                                         <h3 class="elementor-post__title">
-                                            <a href="/tin-tuc/<?php echo htmlspecialchars($post['slug']); ?>">
-                                                <?php echo htmlspecialchars($post['title']); ?>
+                                            <a href="/tin-tuc/<?php echo htmlspecialchars($post['id']); ?>">
+                                                <?php echo htmlspecialchars($post['name']); ?>
                                             </a>
                                         </h3>
                                         <div class="elementor-post__excerpt">
-                                            <p><?php echo htmlspecialchars($post['summary']); ?></p>
+                                            <p><?php echo htmlspecialchars($post['description']); ?></p>
                                         </div>
                                         <a class="elementor-post__read-more"
-                                            href="/tin-tuc/<?php echo htmlspecialchars($post['slug']); ?>"
-                                            aria-label="Read more about <?php echo htmlspecialchars($post['title']); ?>">
+                                            href="/tin-tuc/<?php echo htmlspecialchars($post['id']); ?>"
+                                            aria-label="Read more about <?php echo htmlspecialchars($post['name']); ?>">
                                             Xem thêm »
                                         </a>
                                     </div>

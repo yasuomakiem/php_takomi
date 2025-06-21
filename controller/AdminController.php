@@ -14,13 +14,15 @@ class AdminController
 
     // Trang login
     public function login()
-    {
+    {   
+        echo "<div class='col-4'>";
         echo "<h1>Admin Login</h1>";
         echo "<form method='POST' action='admin.php?action=auth'>
             Email: <input type='email' name='email'><br><br>
             Password: <input type='password' name='password'><br><br>
             <button type='submit'>Đăng nhập</button>
         </form>";
+        echo "</div>";
     }
 
     // Xác thực: Check với bảng users (name='admin')
@@ -29,12 +31,10 @@ class AdminController
         // session_start();
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
-
         // Tìm user name = admin + email đúng
         $stmt = $this->conn->prepare("SELECT * FROM users WHERE name = 'admin' AND email = ?");
         $stmt->execute([$email]);
         $admin = $stmt->fetch();
-
         if ($admin && password_verify($password, $admin['password'])) {
             $_SESSION['admin_logged_in'] = true;
             header('Location: admin.php');
@@ -55,8 +55,7 @@ class AdminController
     // Dashboard admin
     public function index()
     {
-        echo "<h1>Admin Dashboard</h1>";
-        echo "<p>Xin chào Admin!</p>";
-        echo "<a href='admin.php?action=logout'>Đăng xuất</a>";
+        include __DIR__ . '/../public/admin_module/index.php';
+
     }
 }

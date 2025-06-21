@@ -10,9 +10,9 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 <footer style="background:#EAEAEA;">
     <div class="elementor-element elementor-element-91d9ab8 animated-slow e-flex e-con-boxed e-con e-parent">
-        <div class="e-con-inner d-flex">
+        <div class="container">
             <div class="row">
-                <div class="col-4">
+                <div class="col-12 col-lg-4">
                     <div class="elementor-element elementor-element-92b5f24 e-con-full e-flex e-con e-child"
                         data-id="92b5f24" data-element_type="container">
                         <div class="elementor-element elementor-element-b8ec42e elementor-widget elementor-widget-theme-site-logo elementor-widget-image"
@@ -88,7 +88,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-12 col-lg-4">
                     <div class="elementor-element elementor-element-e352b03 e-con-full e-flex e-con e-child"
                         data-id="e352b03" data-element_type="container">
                         <div class="elementor-element elementor-element-c40fb08 elementor-widget elementor-widget-heading"
@@ -176,7 +176,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-12 col-lg-4">
                     <iframe class="w-100 h-100"
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.773818170317!2d105.77121248506292!3d10.03551434683972!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31a0895358d1e21b%3A0x7950cbe9ace4d06c!2zVMOSQSBOSMOAIFBWQ09NQkFOSyBD4bqmTiBUSMag!5e0!3m2!1svi!2s!4v1749920929979!5m2!1svi!2s"
                         style="border:0;" allowfullscreen="" loading="lazy"

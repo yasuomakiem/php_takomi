@@ -9,8 +9,8 @@ $conn = $db->connect();
 // Lấy danh sách dịch vụ
 $sql = "
     SELECT s.*, c.name AS category_name
-    FROM services s
-    JOIN service_categories c ON s.category_id = c.id
+    FROM news s
+    JOIN new_categories c ON s.category_id = c.id
 ";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
@@ -20,9 +20,9 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container">
-    <h1 class="mb-4 text-center">Danh sách Dịch vụ</h1>
+    <h1 class="mb-4 text-center">Danh sách Tin tức</h1>
 
-    <a href="add_service.php" class="btn btn-success mb-3">Thêm Dịch vụ</a>
+    <a href="add_service.php" class="btn btn-success mb-3">Thêm tin tức</a>
 
     <table class="table table-bordered">
         <thead class="thead-dark">

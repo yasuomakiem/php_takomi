@@ -15,25 +15,25 @@ $admin = new Controller\AdminController($conn);
 $action = $_GET['action'] ?? 'index';
 
 
-// if (!isset($_SESSION['admin_logged_in']) && !in_array($action, ['login', 'auth'])) {
-//     header('Location: admin.php?action=login');
-//     exit;
-// }
+if (!isset($_SESSION['admin_logged_in']) && !in_array($action, ['login', 'auth'])) {
+    header('Location: admin.php?action=login');
+    exit;
+}
 
-// switch ($action) {
-//     case 'login':
-//         $admin->login();
-//         break;
-//     case 'auth':
-//         $admin->auth();
-//         break;
-//     case 'logout':
-//         $admin->logout();
-//         break;
-//     default:
-//         $admin->index();
-//         break;
-// }
+switch ($action) {
+    case 'login':
+        $admin->login();
+        break;
+    case 'auth':
+        $admin->auth();
+        break;
+    case 'logout':
+        $admin->logout();
+        break;
+    default:
+        $admin->index();
+        break;
+}
 
 ?>
 <!DOCTYPE html>
@@ -61,9 +61,10 @@ $action = $_GET['action'] ?? 'index';
         if ($module === 'dich-vu') {
            require_once __DIR__ . '/admin_module/dich_vu.php>';
         } elseif ($module === 'nguoi-dung') {
-            echo "Quản lý người dùng";
-        } elseif (empty($module)) {
-            echo "Admin Dashboard";
+            require_once __DIR__ . '/admin_module/nguoi_dung.php>';
+        } elseif ($module === 'tin-tuc') {
+            require_once __DIR__ . '/admin_module/tin_tuc.php>';
+        }elseif (empty($module)) {
         } else {
             echo "404 - Module không tồn tại.";
         }
