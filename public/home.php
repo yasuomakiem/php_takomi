@@ -1,7 +1,6 @@
-<div class="elementor-element elementor-element-91d9ab8 animated-slow e-flex e-con-boxed e-con e-parent">
-    <div class="e-con-inner d-flex">
+<div class="container">
         <div class="row">
-            <div class="col-6">
+            <div class="col-12 col-lg-6">
                 <div class="row align-items-center h-100">
                     <div>
                         <div
@@ -65,7 +64,7 @@
                 </div>
 
             </div>
-            <div class="col-6">
+            <div class="col-12 col-lg-6">
                 <div class="elementor-element elementor-element-aa16e9b elementor-widget elementor-widget-image">
                     <div class="p-3">
                         <img decoding="async" width="736" height="736"
@@ -79,7 +78,6 @@
         </div>
 
     </div>
-</div>
 
 <div class="elementor-element elementor-element-91d9ab8 animated-slow e-flex e-con-boxed e-con e-parent">
     <div class="e-con-inner d-flex">

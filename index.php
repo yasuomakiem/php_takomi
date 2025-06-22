@@ -27,12 +27,12 @@ $path = strtok($path, '?'); // Bỏ query string
 if ($path === '/' || $path === '/home') {
     require_once __DIR__ . '/partials/header.php';
 
-    require_once __DIR__ . '/public/home.php>';
+    require_once __DIR__ . '/public/home.php';
 
     require_once __DIR__ . '/partials/footer.php>';    
 
 } elseif ($path === '/admin') {
-     require_once __DIR__ . '/public/admin.php>';
+     require_once __DIR__ . '/public/admin.php';
 
 } elseif ($path === '/services') {
     require_once __DIR__ . '/controller/ServiceController.php';

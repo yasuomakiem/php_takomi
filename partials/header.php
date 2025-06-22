@@ -25,6 +25,7 @@ $menus = $menuStmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Trang Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- CSS dùng chung -->
     <link rel="stylesheet" href="/public/css/bs-4.css">
     <link rel="stylesheet" href="/public/css/custom-frontend.min.css">
